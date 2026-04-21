@@ -1,26 +1,50 @@
-<form method="POST" action="/admin/polls">
-    @csrf
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="text-xl font-semibold">Create Poll</h2>
+    </x-slot>
 
-    <label>Question</label>
-    <input type="text" name="question" required>
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
 
-    <div id="options">
-        <input type="text" name="options[]" placeholder="Option 1" required>
-        <input type="text" name="options[]" placeholder="Option 2" required>
+        <form method="POST" action="/admin/polls">
+            @csrf
+
+            <!-- Question -->
+            <div class="mb-4">
+                <x-input-label value="Question" />
+                <x-text-input name="question" class="w-full" />
+                <x-input-error :messages="$errors->get('question')" />
+            </div>
+
+            <!-- Options -->
+            <div id="options">
+                <div class="mb-2">
+                    <x-text-input name="options[]" placeholder="Option 1" class="w-full" />
+                </div>
+                <div class="mb-2">
+                    <x-text-input name="options[]" placeholder="Option 2" class="w-full" />
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <button type="button" onclick="addOption()" class="text-blue-500">+ Add Option</button>
+            </div>
+
+            <div class="mt-6">
+                <x-primary-button>Create</x-primary-button>
+            </div>
+        </form>
+
     </div>
 
-    <button type="button" onclick="addOption()">Add Option</button>
+    <script>
+        function addOption() {
+            let div = document.getElementById('options');
+            let inputWrapper = document.createElement('div');
+            inputWrapper.classList.add('mb-2');
 
-    <button type="submit">Create Poll</button>
-</form>
+            inputWrapper.innerHTML = `<input type="text" name="options[]" class="w-full border rounded" placeholder="New option">`;
 
-<script>
-function addOption() {
-    let div = document.getElementById('options');
-    let input = document.createElement('input');
-    input.type = 'text';
-    input.name = 'options[]';
-    input.placeholder = 'New option';
-    div.appendChild(input);
-}
-</script>
+            div.appendChild(inputWrapper);
+        }
+    </script>
+</x-app-layout>

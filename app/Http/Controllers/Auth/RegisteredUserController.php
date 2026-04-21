@@ -37,7 +37,7 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $adminKey = request()->get('admin_key');
+        $adminKey = $request->input('admin_key');
 
         if ($adminKey && $adminKey === config('app.admin_signup_key')) {
             $role = Role::where('slug', 'admin')->first();

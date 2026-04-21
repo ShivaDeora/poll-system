@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VoteController;
+use App\Http\Controllers\Admin\PollController as AdminPollController;
+use App\Http\Controllers\PollController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,16 +17,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
+
+Route::get('/', [PollController::class, 'index']);
+Route::get('/poll/{poll}', [PollController::class, 'show']);
+
+Route::post('/poll/{poll}/vote', [VoteController::class, 'vote']);
 
 Route::get('/admin/signup/{key}', [AdminAuthController::class, 'show']);
 Route::post('/admin/signup/{key}', [AdminAuthController::class, 'store']);
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    $user = auth()->user();
+    if ($user->role->slug === 'super_admin' || $user->role->slug === 'admin') {
+        return redirect('/admin/polls');
+    }
+    return redirect('/');
+})->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -33,11 +44,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->group(function () {
-    Route::get('/polls', [PollController::class, 'index']);
-    Route::get('/polls/create', [PollController::class, 'create']);
-    Route::post('/polls', [PollController::class, 'store']);
+    Route::get('/polls', [AdminPollController::class, 'index']);
+    Route::get('/polls/create', [AdminPollController::class, 'create']);
+    Route::post('/polls', [AdminPollController::class, 'store']);
 });
-
-Route::post('/poll/{poll}/vote', [VoteController::class, 'vote']);
 
 require __DIR__.'/auth.php';

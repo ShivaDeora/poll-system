@@ -2,6 +2,9 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
+        <!-- Hidden admin key -->
+        <input type="hidden" name="admin_key" value="{{ request('admin_key') }}">
+
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />

@@ -15,6 +15,18 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @auth
+                        @if(auth()->user()->role && in_array(auth()->user()->role->slug, ['admin', 'super_admin']))
+                            <x-nav-link :href="url('/admin/polls')" :active="request()->is('admin/polls*')">
+                                Admin Polls
+                            </x-nav-link>
+                        @endif
+
+                        <x-nav-link :href="url('/')" :active="request()->is('/')">
+                            Polls
+                        </x-nav-link>
+                    @endauth
                 </div>
             </div>
 
