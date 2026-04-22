@@ -10,7 +10,7 @@
 
         <div class="bg-white rounded shadow-sm p-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ $poll->question }}</h3>
-            <p class="text-sm text-gray-500 mb-6">{{ $totalVotes }} total {{ Str::plural('vote', $totalVotes) }}</p>
+            <p class="text-sm text-gray-500 mb-6">{{ $totalVotes }} total {{ $totalVotes === 1 ? 'vote' : 'votes' }}</p>
 
             @foreach($poll->pollOptions as $option)
                 @php
@@ -20,7 +20,7 @@
                 <div class="mb-4">
                     <div class="flex justify-between text-sm mb-1">
                         <span class="text-gray-800">{{ $option->option_text }}</span>
-                        <span class="text-gray-500">{{ $option->vote_count }} {{ Str::plural('vote', $option->vote_count) }} &middot; {{ $percent }}%</span>
+                        <span class="text-gray-500">{{ $option->vote_count }} {{ $option->vote_count === 1 ? 'vote' : 'votes' }} &middot; {{ $percent }}%</span>
                     </div>
                     <div class="w-full bg-gray-100 rounded h-4">
                         <div class="bg-blue-500 h-4 rounded transition-all duration-300" style="width: {{ $percent }}%"></div>

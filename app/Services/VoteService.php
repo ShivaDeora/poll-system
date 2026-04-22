@@ -6,6 +6,7 @@ use App\Models\Vote;
 use App\Models\Poll;
 use App\Models\PollOption;
 use App\Events\VoteUpdated;
+use App\Exceptions\AlreadyVotedException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,7 +25,7 @@ class VoteService
                 ->exists();
 
             if ($alreadyVoted) {
-                throw new \Exception('You have already voted.');
+                throw new AlreadyVotedException();
             }
 
             Vote::create([

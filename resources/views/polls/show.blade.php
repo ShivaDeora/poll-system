@@ -13,7 +13,6 @@
                     <label>
                         <input type="radio" name="option_id" value="{{ $option->id }}" @checked($index === 0)>
                         {{ $option->option_text }}
-                        ({{ $option->vote_count }} votes)
                     </label>
                 </div>
             @endforeach
@@ -88,8 +87,7 @@
             }
 
             window.Echo.channel('poll.{{ $poll->id }}')
-                .listen('.vote.updated', (e) => {
-                    console.log('Live update received:', e);
+                .listen('.vote.updated', () => {
                     loadResults();
                 });
         }

@@ -10,7 +10,7 @@ $totalVotes = $poll->pollOptions->sum('vote_count');
     <div class="mb-2">
         <div class="flex justify-between text-sm">
             <span>{{ $option->option_text }}</span>
-            <span>{{ $percent }}%</span>
+            <span class="text-gray-500">{{ $option->vote_count }} {{ $option->vote_count === 1 ? 'vote' : 'votes' }} · {{ $percent }}%</span>
         </div>
 
         <div class="w-full bg-gray-200 rounded h-3">

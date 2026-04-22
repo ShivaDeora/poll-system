@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\VoteService;
 use App\Models\Poll;
+use App\Exceptions\AlreadyVotedException;
 
 class VoteController extends Controller
 {
@@ -32,7 +33,7 @@ class VoteController extends Controller
                 'message' => 'Vote submitted successfully'
             ]);
 
-        } catch (\Exception $e) {
+        } catch (AlreadyVotedException $e) {
             return response()->json([
                 'error' => $e->getMessage()
             ], 422);
