@@ -71,7 +71,7 @@ php artisan serve
 Register as an admin by visiting:
 
 ```
-http://localhost:8000/register?admin_key=your-secret-key
+http://localhost:8000/register?admin_key=chatway-poll-admin-key
 ```
 
 The `admin_key` must match `ADMIN_SIGNUP_KEY` in your `.env`. After login, admins land on `/admin/polls` where they can create polls, view results, and copy shareable links.
@@ -86,8 +86,14 @@ Uses Pusher — no local WebSocket server needed. When a vote is submitted, the 
 
 ## Tests
 
+Run the full test suite:
+
 ```bash
 php artisan test
 ```
 
-Tests run against an in-memory SQLite database and do not affect your local data.
+To run only the voting test cases:
+
+```bash
+php artisan test --filter=VotingTest
+```
