@@ -8,10 +8,10 @@
         <form id="voteForm">
             @csrf
 
-            @foreach($poll->pollOptions as $option)
+            @foreach($poll->pollOptions as $index => $option)
                 <div class="mb-2">
                     <label>
-                        <input type="radio" name="option_id" value="{{ $option->id }}">
+                        <input type="radio" name="option_id" value="{{ $option->id }}" @checked($index === 0)>
                         {{ $option->option_text }}
                         ({{ $option->vote_count }} votes)
                     </label>
@@ -25,6 +25,8 @@
 
         <p id="message" class="mt-4 text-green-500"></p>
 
+        <div id="results" class="mt-6"></div>
+
     </div>
 
     <script>
@@ -36,6 +38,12 @@
 
             const btn = form.querySelector('button[type="submit"]');
             const radios = form.querySelectorAll('input[name="option_id"]');
+            const selected = form.querySelector('input[name="option_id"]:checked');
+
+            if (!selected) {
+                messageEl.innerText = "Please select an option.";
+                return;
+            }
 
             btn.disabled = true;
 
@@ -61,7 +69,6 @@
                 messageEl.innerText = data.message;
 
                 radios.forEach(r => r.disabled = true);
-                //await loadResults();
             } catch (e) {
                 messageEl.innerText = "Something went wrong. Try again.";
                 btn.disabled = false;
@@ -73,6 +80,21 @@
             const html = await res.text();
             document.getElementById('results').innerHTML = html;
         }
+
+        function waitForEchoAndSubscribe() {
+            if (!window.Echo) {
+                setTimeout(waitForEchoAndSubscribe, 300);
+                return;
+            }
+
+            window.Echo.channel('poll.{{ $poll->id }}')
+                .listen('.vote.updated', (e) => {
+                    console.log('Live update received:', e);
+                    loadResults();
+                });
+        }
+
+        waitForEchoAndSubscribe();
     </script>
 
 </x-app-layout>

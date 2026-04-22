@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\Vote;
+use App\Models\Poll;
 use App\Models\PollOption;
+use App\Events\VoteUpdated;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,6 +35,10 @@ class VoteService
             ]);
 
             PollOption::where('id', $optionId)->increment('vote_count');
+
+            $poll = Poll::with('pollOptions')->find($pollId);
+
+            broadcast(new VoteUpdated($poll));
 
             return true;
         });
