@@ -17,12 +17,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/*Route::get('/', function () {
+Route::get('/', function () {
     return view('welcome');
-});*/
+});
 
-Route::get('/', [PollController::class, 'index']);
 Route::get('/poll/{poll}', [PollController::class, 'show']);
+Route::get('/poll/{poll}/results', [PollController::class, 'results']);
 
 Route::post('/poll/{poll}/vote', [VoteController::class, 'vote']);
 

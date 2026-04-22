@@ -18,4 +18,10 @@ class PollController extends Controller
         $poll->load('pollOptions');
         return view('polls.show', compact('poll'));
     }
+
+    public function results(Poll $poll)
+    {
+        $poll->load('pollOptions');
+        return view('polls.partials.results', compact('poll'));
+    }
 }

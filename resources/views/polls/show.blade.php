@@ -3,7 +3,7 @@
         {{ $poll->question }}
     </x-slot>
 
-    <div class="p-6">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
 
         <form id="voteForm">
             @csrf
@@ -28,24 +28,51 @@
     </div>
 
     <script>
-        document.getElementById('voteForm').addEventListener('submit', function(e) {
+        const form = document.getElementById('voteForm');
+        const messageEl = document.getElementById('message');
+
+        form?.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            let formData = new FormData(this);
+            const btn = form.querySelector('button[type="submit"]');
+            const radios = form.querySelectorAll('input[name="option_id"]');
 
-            fetch("{{ url('/poll/'.$poll->id.'/vote') }}", {
-                method: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                },
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('message').innerText = data.message;
-                location.reload(); // temporary refresh
-            });
+            btn.disabled = true;
+
+            const formData = new FormData(form);
+
+            try {
+                const res = await fetch("{{ url('/poll/'.$poll->uuid.'/vote') }}", {
+                    method: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    body: formData
+                });
+
+                const data = await res.json();
+
+                if (data.error) {
+                    messageEl.innerText = data.error;
+                    btn.disabled = false;
+                    return;
+                }
+
+                messageEl.innerText = data.message;
+
+                radios.forEach(r => r.disabled = true);
+                //await loadResults();
+            } catch (e) {
+                messageEl.innerText = "Something went wrong. Try again.";
+                btn.disabled = false;
+            }
         });
+
+        async function loadResults() {
+            const res = await fetch("{{ url('/poll/'.$poll->uuid.'/results') }}");
+            const html = await res.text();
+            document.getElementById('results').innerHTML = html;
+        }
     </script>
 
 </x-app-layout>

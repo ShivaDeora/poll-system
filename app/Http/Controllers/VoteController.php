@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\VoteService;
+use App\Models\Poll;
 
 class VoteController extends Controller
 {
@@ -14,7 +15,7 @@ class VoteController extends Controller
         $this->voteService = $voteService;
     }
 
-    public function vote(Request $request, $pollId)
+    public function vote(Request $request, Poll $poll)
     {
         $request->validate([
             'option_id' => 'required|exists:poll_options,id',
@@ -22,7 +23,7 @@ class VoteController extends Controller
 
         try {
             $this->voteService->submitVote(
-                $pollId,
+                $poll->id,
                 $request->option_id,
                 $request->ip()
             );
