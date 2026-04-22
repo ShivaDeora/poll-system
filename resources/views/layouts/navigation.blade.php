@@ -47,7 +47,6 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
-                        <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
@@ -59,6 +58,11 @@
                         </form>
                     </x-slot>
                 </x-dropdown>
+            </div>
+            @else
+            <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-4">
+                <a href="{{ route('login') }}" class="text-sm text-gray-500 hover:text-gray-700">Log in</a>
+                <a href="{{ route('register') }}" class="text-sm text-gray-500 hover:text-gray-700">Register</a>
             </div>
             @endauth
 
@@ -95,7 +99,6 @@
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
 
-                <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
@@ -105,6 +108,17 @@
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
+            </div>
+        </div>
+        @else
+        <div class="pt-4 pb-1 border-t border-gray-200">
+            <div class="space-y-1">
+                <x-responsive-nav-link :href="route('login')">
+                    {{ __('Log in') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('register')">
+                    {{ __('Register') }}
+                </x-responsive-nav-link>
             </div>
         </div>
         @endauth
