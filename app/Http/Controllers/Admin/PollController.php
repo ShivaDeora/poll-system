@@ -46,4 +46,11 @@ class PollController extends Controller
 
         return redirect('/admin/polls')->with('success', 'Poll created!');
     }
+
+    public function show(Poll $poll)
+    {
+        $poll->load('pollOptions');
+        $totalVotes = $poll->pollOptions->sum('vote_count');
+        return view('admin.polls.show', compact('poll', 'totalVotes'));
+    }
 }

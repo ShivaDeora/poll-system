@@ -34,8 +34,8 @@ class VoteController extends Controller
 
         } catch (\Exception $e) {
             return response()->json([
-                'message' => $e->getMessage()
-            ], 400);
+                'error' => $e->getMessage()
+            ], 422);
         }
     }
 }

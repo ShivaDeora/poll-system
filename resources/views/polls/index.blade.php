@@ -7,7 +7,7 @@
         @foreach($polls as $poll)
             <div class="mb-4 p-4 border rounded">
                 <p class="font-bold">{{ $poll->question }}</p>
-                <a href="{{ url('/poll/'.$poll->id) }}" class="text-blue-500">
+                <a href="{{ url('/poll/'.$poll->uuid) }}" class="text-blue-500">
                     View Poll
                 </a>
             </div>

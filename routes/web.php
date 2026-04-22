@@ -26,9 +26,6 @@ Route::get('/poll/{poll}/results', [PollController::class, 'results']);
 
 Route::post('/poll/{poll}/vote', [VoteController::class, 'vote']);
 
-Route::get('/admin/signup/{key}', [AdminAuthController::class, 'show']);
-Route::post('/admin/signup/{key}', [AdminAuthController::class, 'store']);
-
 Route::get('/dashboard', function () {
     $user = auth()->user();
     if ($user->role->slug === 'super_admin' || $user->role->slug === 'admin') {
@@ -47,6 +44,7 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->group(fu
     Route::get('/polls', [AdminPollController::class, 'index']);
     Route::get('/polls/create', [AdminPollController::class, 'create']);
     Route::post('/polls', [AdminPollController::class, 'store']);
+    Route::get('/polls/{poll}', [AdminPollController::class, 'show']);
 });
 
 require __DIR__.'/auth.php';
